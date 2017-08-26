@@ -12,6 +12,7 @@ env = init_environment("qt5 geant4 clhep evio xercesc ccdb mlibrary cadmesh")
 # added because clhep is still behind clang (5/2015)
 if env['PLATFORM'] == 'darwin':
 	env.Append(CXXFLAGS='-Wno-absolute-value')
+env.Append(CXXFLAGS='-Wdeprecated')
 
 # Materials
 env.Append(CPPPATH = 'materials')
@@ -180,10 +181,13 @@ gemc_sources = Split("""
 	src/MEventAction.cc
 	src/MPrimaryGeneratorAction.cc
 	src/ActionInitialization.cc
+	src/MTrackingAction.cc
+	src/MyOutput.cc
 	src/MSteppingAction.cc""")
 
 env.Append(LIBPATH = ['lib'])
 env.Prepend(LIBS =  ['gmaterials', 'gmirrors', 'gparameters', 'gutilities', 'gdetector', 'gsensitivity', 'gphysics', 'gfields', 'ghitprocess', 'goutput', 'ggui'])
+env.ParseConfig("root-config --glibs --cflags")
 env.Program(source = gemc_sources, target = "gemc")
 
 

@@ -9,6 +9,7 @@ ActionInitialization::ActionInitialization(goptions* go, map<string, double> *gP
 	genAction = new MPrimaryGeneratorAction(go);
 	evtAction = new MEventAction(*go, *gPars);
 	stpAction = new MSteppingAction(*go);
+	trkAction = new MTrackingAction();
 }
 
 
@@ -27,5 +28,6 @@ void ActionInitialization::Build() const
 	SetUserAction(genAction);
 	SetUserAction(evtAction);
 	SetUserAction(stpAction);
+	SetUserAction(trkAction);
 }
 

@@ -14,6 +14,7 @@ using namespace ccdb;
 
 // geant4
 #include "Randomize.hh"
+#include "MyOutput.h"
 
 
 static dcConstants initializeDCConstants(int runno)
@@ -328,7 +329,17 @@ map<string, double> dc_HitProcess :: integrateDgt(MHit* aHit, int hitn)
 	dgtz["sdoca"]      = sdoca;
 	dgtz["time"]       = ineff*unsmeared_time;
 	dgtz["stime"]      = ineff*smeared_time;
-	
+
+{
+	int sector     = identity[0].id;
+	int layer      = SLI*6 + identity[2].id;
+	int wire       = nwire;
+	double tdc        = smeared_time;
+
+	MyOutput* mout = MyOutput::getInstance();
+	mout->SetDC(trackIds, sector, layer, wire);
+	mout->FillDgtz();
+}
      //cout << SECI+1 << " " << SLI+1 << " " << dgtz["layer"] <<  " " << thisMgnf/tesla << " " << alpha << " " << dgtz["tdc"] << " " << sdoca <<  " " <<  dcc.driftVelocity[SLI] << " " << dgtz["stime"]  << endl;
 
 	return dgtz;
@@ -367,7 +378,13 @@ vector<identifier>  dc_HitProcess :: processID(vector<identifier> id, G4Step* aS
 	
 	// all energy to this wire (no energy sharing)
 	yid[3].id_sharing = 1;
-	
+
+/*
+std::cout<<"kimALL: "<<aStep->GetTrack()->GetTrackID()<<" ";
+std::cout<<Detector.name<<" ";
+std::cout<<yid[3].id<<"\n";
+*/
+
 	return yid;
 }
 

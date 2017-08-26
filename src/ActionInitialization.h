@@ -5,11 +5,14 @@
 #include "MPrimaryGeneratorAction.h"
 #include "MEventAction.h"
 #include "MSteppingAction.h"
+#include "MTrackingAction.h"
 #include "options.h"
 
 
 // geant4
 #include "G4VUserActionInitialization.hh"
+#include "TTree.h"
+#include "TFile.h"
 
 
 /// Action initialization class.
@@ -26,6 +29,7 @@ public:
 	MPrimaryGeneratorAction *genAction;
 	MEventAction            *evtAction;
 	MSteppingAction         *stpAction;
+	MTrackingAction         *trkAction;
 };
 
 

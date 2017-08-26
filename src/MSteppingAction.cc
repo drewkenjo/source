@@ -1,8 +1,9 @@
 // G4 headers
 #include "G4ParticleTypes.hh"
-
+#include "G4VProcess.hh"
 // gemc headers
 #include "MSteppingAction.h"
+#include "MyOutput.h"
 
 MSteppingAction::MSteppingAction(goptions Opt)
 {
@@ -23,7 +24,20 @@ void MSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
 	G4ThreeVector   pos   = aStep->GetPostStepPoint()->GetPosition();      ///< Global Coordinates of interaction
 	G4Track*        track = aStep->GetTrack();
-	
+
+	G4StepPoint* stp = aStep->GetPostStepPoint();
+	const G4VProcess* proc = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+
+	MyOutput* mout = MyOutput::getInstance();
+
+	if(stp && proc && proc->GetProcessType() != fTransportation){
+		mout->SetTid(track->GetTrackID());
+		mout->SetNames(proc->GetProcessName(), stp->GetPhysicalVolume()->GetName());
+		mout->SetPosition(stp->GetPosition());
+		mout->SetMomentum(stp->GetMomentum());
+		mout->FillStep();
+	}
+
 	if(fabs(pos.x()) > max_x_pos ||
 	   fabs(pos.y()) > max_y_pos ||
 	   fabs(pos.z()) > max_z_pos ) track->SetTrackStatus(fStopAndKill);   ///< Killing track if outside of interest region

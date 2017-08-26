@@ -96,6 +96,7 @@ const char *GEMC_VERSION = "gemc 2.6";
 	int get_pid(){return 0;}
 #endif
 
+#include "MyOutput.h"
 // distinguishing between graphical and batch mode
 QCoreApplication* createApplication(int &argc, char *argv[], double use_gui)
 {
@@ -414,6 +415,7 @@ int main( int argc, char **argv )
 	     << " Events only time: " << clockEventTaken / (double) CLOCKS_PER_SEC << " seconds. " << endl;
 
 	
+	MyOutput::getInstance()->Write();
 	delete runManager;
 	return 1;
 }
