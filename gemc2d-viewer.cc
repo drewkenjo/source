@@ -1,34 +1,3 @@
-/// \mainpage
-/// \htmlonly <center><img src="gemc_logo.gif" width="230"></center>\endhtmlonly
-/// \section overview Overview
-/// gemc (<b>GE</b>ant4 <b>M</b>onte<b>C</b>arlo) GEMC is a C++ framework
-/// based on <a href="http://geant4.web.cern.ch/geant4/"> Geant4 </a>
-/// Libraries to simulate the passage of particles through matter.\n
-/// The simulation parameters are external to the software:
-/// Geometry, Materials, Fields, Banks definitions are stored in
-/// external databases in various format and are loaded at run
-/// time using factory methods.\n
-/// \section databases Databases
-/// gemc currently supports <i> mysql, gdml, TEXT </i> to build the detector systems: \n
-/// - Geometry.
-/// - Sensitive Detectors.
-/// - Hit Process.
-/// - Banks Format.
-/// - Materials.
-/// \section platforms Platforms Supported:
-/// - <i> Windows 7 to come October 2016 </i>
-/// - Linux (32, 64)
-/// - Mac OS X
-/// \section docs Documentation:
-/// - <a href="http://gemc.jlab.org">  gemc website </a>
-/// \n\n
-/// \author \n &copy; Maurizio Ungaro
-/// \author e-mail: ungaro@jlab.org\n\n\n
-/// \file gemc.cc
-/// Defines the gemc main( int argc, char **argv )
-/// \author \n &copy; Maurizio Ungaro
-/// \author e-mail: ungaro@jlab.org\n\n\n
-
 const char *GEMC_VERSION = "gemc 2.6";
 
 // G4 headers
@@ -71,26 +40,6 @@ const char *GEMC_VERSION = "gemc 2.6";
 // c++ headers
 #include <unistd.h>  // needed for get_pid
 
-/////////////////////////
-/// <b> Main Program </b>
-/////////////////////////
-///  -# Sets the goptions\n
-///  -# Starts QT application if USE_GUI=1 or 2
-///  -# Starts the CLHEP random engine
-///  -# Instantiates the Geant4 Run Manager
-///  -# Builds detector map object from database
-///  -# Builds Processes Routines Map
-///  -# Builds Materials Map
-///  -# Builds G4 Physical Volumes
-///  -# Initialize Physics List
-///  -# Initialize Generator, Event and Stepping Actions
-///  -# Initialize G4Qt User Interface if USE_GUI>0
-///  -# Initialize Visualization Manager if USE_GUI>0
-
-
-// get_pid is useful only on the farm to set the seed
-// can set to zero in Windows environment
-// ideally we'd want __get_pid();
 #ifdef _MSC_VER
 #include <stdio.h>
 #include <process.h>
@@ -103,6 +52,7 @@ int main( int argc, char **argv )
 	goptions gemcOpt;
 	gemcOpt.setGoptions();
 	gemcOpt.optMap["USE_GUI"].arg = 0;
+	gemcOpt.optMap["NO_FIELD"].args = "all";
 	gemcOpt.setOptMap(argc, argv);
 	
 	gui_splash gemc_splash(gemcOpt);
@@ -259,7 +209,6 @@ int main( int argc, char **argv )
 	G4UImanager* UImanager = G4UImanager::GetUIpointer();
 	UImanager->SetCoutDestination(NULL);
 
-
 	// saving simulation condition in the output file
 	if(outContainer.outType != "no")
 	{
@@ -281,7 +230,7 @@ int main( int argc, char **argv )
 	string exec_macro = "/control/execute " + gemcOpt.optMap["EXEC_MACRO"].args;
 	
 	QApplication app(argc, argv);
-	Window window(UImanager);
+	Window window(UImanager, gGun, stpAction);
 	window.show();
 	return app.exec();
 }

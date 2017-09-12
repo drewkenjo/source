@@ -21,6 +21,9 @@ public:
 	G4ParticleGun* fParticleGun;
 
 	bool isFileOpen() {return false;}
+
+	std::vector<G4ThreeVector> vertices;
+	std::vector<G4ThreeVector> dirmoms;
 };
 
 #endif

@@ -12,6 +12,9 @@ class GRaySteppingAction : public G4UserSteppingAction
 		virtual ~GRaySteppingAction(){};
 		
 		void UserSteppingAction(const G4Step*);
+
+		std::vector<G4ThreeVector> vertices;
+		std::vector<G4ThreeVector> points;
 };
 
 #endif

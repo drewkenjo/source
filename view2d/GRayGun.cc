@@ -34,16 +34,10 @@ GRayGun::~GRayGun()
 
 void GRayGun::GeneratePrimaries(G4Event* anEvent)
 {
-  double tmp;
-  int nparts;
-  int id, type, pdg;
-  double px, py, pz, ptot, mass;
-  double vx, vy, vz, charge;
-  char line[1024];
-
-  G4ThreeVector pi0mom(0,0,1);
-  fParticleGun->SetParticleMomentumDirection(pi0mom.unit());
-  fParticleGun->SetParticlePosition(G4ThreeVector(0, 0, vz));
+  fParticleGun->SetParticleMomentumDirection(dirmoms.back());
+  dirmoms.pop_back();
+  fParticleGun->SetParticlePosition(vertices.back());
+  vertices.pop_back();
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
