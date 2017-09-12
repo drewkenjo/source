@@ -187,6 +187,24 @@ env.Prepend(LIBS =  ['gmaterials', 'gmirrors', 'gparameters', 'gutilities', 'gde
 env.Program(source = gemc_sources, target = "gemc")
 
 
+env.Append(CPPPATH = ['view2d'])
+gemc2d_sources = Split("""
+	gemc2d-viewer.cc
+	src/dmesg_init.cc
+	src/run_conditions.cc
+	src/gemc_options.cc
+	src/MDetectorConstruction.cc
+	src/MDetectorMessenger.cc
+	view2d/GRaySteppingAction.cc
+	view2d/GRayGun.cc
+	view2d/window.cc
+	view2d/render2d.cc""")
+
+env.Append(LIBPATH = ['lib'])
+env.Prepend(LIBS =  ['gmaterials', 'gmirrors', 'gparameters', 'gutilities', 'gdetector', 'gsensitivity', 'gphysics', 'gfields', 'ghitprocess', 'goutput'])
+env.Program(source = gemc2d_sources, target = "gemc2d-viewer")
+
+
 if env['LIBRARY'] == "static":
 	env.Library(source = gemc_sources, target = "gemc")
 
