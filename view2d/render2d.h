@@ -5,27 +5,35 @@
 #include <G4UImanager.hh>
 #include "GRaySteppingAction.h"
 #include "GRayGun.h"
+#include "window.h"
 
 class Render2D : public QWidget
 {
     Q_OBJECT
 
 public:
-	Render2D(G4UImanager*, GRayGun*, GRaySteppingAction*);
+	Render2D(Window*, G4UImanager*, GRaySteppingAction*, GRayGun*);
 	QSize minimumSizeHint() const override {return QSize(800,600);};
 	QSize sizeHint() const override {return QSize(800,600);};
+
+	void setFrame(double, double, double, double);
+	void scan();
 
 protected:
 	void paintEvent(QPaintEvent *event) override;
 
-private:
-	void scan();
-	void rescale();
+	void mousePressEvent(QMouseEvent *event) override;
+	void mouseReleaseEvent(QMouseEvent *event) override;
+	void mouseMoveEvent(QMouseEvent *event) override;
 
-	double wrange, hrange, w0, h0;
+private:
+	double w1, h1, w0, h0;
+	double x0, y0, x1, y1;
+	bool pressed;
+	Window* mainwin;
 
 	G4UImanager *uiman;
-	GRayGun* gPen;
+	GRayGun *gPen;
 	GRaySteppingAction *stpAction;
 };
 

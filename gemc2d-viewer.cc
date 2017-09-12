@@ -53,6 +53,7 @@ int main( int argc, char **argv )
 	gemcOpt.setGoptions();
 	gemcOpt.optMap["USE_GUI"].arg = 0;
 	gemcOpt.optMap["NO_FIELD"].args = "all";
+	gemcOpt.optMap["PHYSICS"].args = "STD";
 	gemcOpt.setOptMap(argc, argv);
 	
 	gui_splash gemc_splash(gemcOpt);

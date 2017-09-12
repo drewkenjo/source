@@ -16,5 +16,9 @@ void GRaySteppingAction::UserSteppingAction(const G4Step* aStep)
 */
 	}
 
+	G4Track* track = aStep->GetTrack();
+	if(track->GetCurrentStepNumber() > 10000)
+		track->SetTrackStatus(fStopAndKill);
+
 }
 
